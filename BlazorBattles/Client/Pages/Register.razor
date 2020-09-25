@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @inject BlazorBattles.Client.Services.IUnitService UnitService
+@inject NavigationManager NavigationManager
 
 <h3>Register</h3>
 
@@ -60,6 +61,6 @@
 
     void HandleRegistration()
     {
-        Console.WriteLine("Store this new user in the database!");
+        NavigationManager.NavigateTo("login");
     }
 }
