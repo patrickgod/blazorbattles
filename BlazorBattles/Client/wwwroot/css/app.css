@@ -123,6 +123,12 @@ app {
     display: flex;
 }
 
+.army-list {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
