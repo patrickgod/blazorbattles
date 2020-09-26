@@ -1,36 +1,28 @@
-﻿@page "/login"
+﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
 
-@if (isAuthenticated)
-{
-    <h3>Welcome, @user.Username!</h3>
-}
-else
-{
-    <h3>Login</h3>
+Please log in below or <NavLink href="register">register</NavLink> for a new account.
 
-    <EditForm Model="@user" OnValidSubmit="HandleLogin">
-        <DataAnnotationsValidator />
-        <div class="form-group">
-            <label for="username">Username</label>
-            <InputText id="username" @bind-Value="user.Username" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-        <ValidationSummary />
-    </EditForm>
-}
+<EditForm Model="@user" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <ValidationSummary />
+</EditForm>
 
 @code {
     private BlazorBattles.Shared.UserLogin user = new BlazorBattles.Shared.UserLogin();
 
-    bool isAuthenticated = false;
-
-    private void HandleLogin()
+    private async void HandleLogin()
     {
-        isAuthenticated = true;
-        Console.WriteLine($"{user.Username} // {user.Password}");
+        await LocalStorage.SetItemAsync<bool>("isAuthenticated", true);
+        await AuthStateProvider.GetAuthenticationStateAsync();
     }
 }
