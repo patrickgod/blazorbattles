@@ -17,7 +17,8 @@
 
 <button @onclick="BuildUnit" class="btn btn-primary">Build</button>
 
-@if (needMoreBananas) {
+@if (needMoreBananas)
+{
     <div class="validation-message">
         Not enough bananas! :(
     </div>
@@ -44,5 +45,10 @@
 
         BananaService.EatBananas(selectedUnit.BananaCost);
         UnitService.AddUnit(selectedUnitId);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
     }
 }
