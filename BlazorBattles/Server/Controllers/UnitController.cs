@@ -27,5 +27,13 @@ namespace BlazorBattles.Server.Controllers
             var units = await _context.Units.ToListAsync();
             return Ok(units);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddUnit(Unit unit)
+        {
+            await _context.Units.AddAsync(unit);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Units.ToListAsync());
+        }
     }
 }
