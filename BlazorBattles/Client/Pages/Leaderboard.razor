@@ -1,6 +1,9 @@
 ﻿@page "/leaderboard"
 @inject BlazorBattles.Client.Services.ILeaderboardService LeaderboardService
 @inject AuthenticationStateProvider AuthStateProvider
+@inject BlazorBattles.Client.Services.IBattleService BattleService
+@inject BlazorBattles.Client.Services.IBananaService BananaService
+@inject IToastService ToastService
 
 <h3>Leaderboard</h3>
 
@@ -33,7 +36,7 @@ else
                     <td>
                         @if (entry.UserId != myUserId)
                         {
-                            <button class="btn btn-primary">Fight</button>
+                            <button class="btn btn-primary" @onclick="@(() => StartBattle(entry.UserId))">Fight</button>
                         }
                     </td>
                 </tr>
@@ -60,5 +63,19 @@ else
             return "color: green; font-weight: 600;";
         else
             return string.Empty;
+    }
+
+    public async Task StartBattle(int opponentId)
+    {
+        var result = await BattleService.StartBattle(opponentId);
+        if (result.RoundsFought <= 0)
+            ToastService.ShowInfo("The battle did not take place.");
+        else if (result.IsVictory)
+            ToastService.ShowSuccess("You won the battle!");
+        else
+            ToastService.ShowWarning("You have been defeated!");
+
+        await LeaderboardService.GetLeaderboard();
+        await BananaService.GetBananas();
     }
 }
